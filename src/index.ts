@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits, REST, Routes, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
-import { CommandNames } from './constants';
-import commands from './command-definitions';
+import { CommandNames } from './config/constants';
+import commands from './config/command-definitions';
 import ActionHandler from './action-handler';
 
 dotenv.config();
