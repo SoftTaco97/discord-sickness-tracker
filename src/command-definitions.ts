@@ -5,11 +5,11 @@ const commands = [
     new SlashCommandBuilder()
         .setName(CommandNames.Sick)
         .setDescription('Manage sickness tallies')
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
             subcommand
                 .setName(CommandNames.Add)
                 .setDescription('Add a sickness tally')
-                .addUserOption(option =>
+                .addUserOption((option) =>
                     option
                         .setName('user')
                         .setDescription(
@@ -18,11 +18,11 @@ const commands = [
                         .setRequired(false)
                 )
         )
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
             subcommand
                 .setName(CommandNames.Remove)
                 .setDescription('Remove a sickness tally')
-                .addUserOption(option =>
+                .addUserOption((option) =>
                     option
                         .setName('user')
                         .setDescription(
@@ -31,12 +31,14 @@ const commands = [
                         .setRequired(false)
                 )
         )
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
             subcommand.setName(CommandNames.Scoreboard).setDescription('Show current scoreboard')
         )
-        .addSubcommand(subcommand =>
-            subcommand.setName(CommandNames.Reset).setDescription('Reset all sickness tallies (Admin only)')
-        )
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName(CommandNames.Reset)
+                .setDescription('Reset all sickness tallies (Admin only)')
+        ),
 ];
 
 export default commands;

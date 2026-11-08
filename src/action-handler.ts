@@ -28,7 +28,9 @@ class ActionHandler {
      */
     async add(): Promise<void> {
         if (!this.canUserModify()) {
-            await this.interaction.reply('You do not have permission to modify other user\'s tallies.');
+            await this.interaction.reply(
+                "You do not have permission to modify other user's tallies."
+            );
             return;
         }
 
@@ -43,7 +45,9 @@ class ActionHandler {
      */
     async remove(): Promise<void> {
         if (!this.canUserModify()) {
-            await this.interaction.reply('You do not have permission to modify other user\'s tallies.');
+            await this.interaction.reply(
+                "You do not have permission to modify other user's tallies."
+            );
             return;
         }
 
@@ -72,12 +76,12 @@ class ActionHandler {
         const talliesList = this.tallyDatabase.getAllForGuild();
 
         const scores =
-            talliesList.map(({ user_id, tally_count }) => `<@${user_id}>: ${tally_count}`).join('\n') ||
-            'No sickness tallies yet.';
+            talliesList
+                .map(({ user_id, tally_count }) => `<@${user_id}>: ${tally_count}`)
+                .join('\n') || 'No sickness tallies yet.';
 
         await this.interaction.reply(`**Scoreboard:**\n${scores}`);
     }
-
 
     /**
      * Reset all tallies for the guild (admin only)
@@ -107,7 +111,10 @@ class ActionHandler {
         const perms = this.interaction.member.permissions;
 
         if (typeof perms === 'string') {
-            return (BigInt(perms) & PermissionsBitField.Flags.Administrator) === PermissionsBitField.Flags.Administrator;
+            return (
+                (BigInt(perms) & PermissionsBitField.Flags.Administrator) ===
+                PermissionsBitField.Flags.Administrator
+            );
         }
 
         return perms.has(PermissionsBitField.Flags.Administrator);

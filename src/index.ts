@@ -26,8 +26,6 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-
-
 const env = getEnv();
 const rest = new REST({ version: '10' }).setToken(env.DISCORD_TOKEN);
 

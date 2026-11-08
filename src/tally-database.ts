@@ -38,11 +38,15 @@ class TallyDatabase {
      * @param guildId guild ID for the current context
      * @param userId user ID for the current context
      */
-    private constructor(private db: Database.Database, private guildId: string, private userId: string) {
+    private constructor(
+        private db: Database.Database,
+        private guildId: string,
+        private userId: string
+    ) {
         this.ensureGuildExists();
         this.ensureUserExists();
     }
-    
+
     /**
      * Initialize the database schema (create tables if they don't exist)
      */
@@ -159,4 +163,3 @@ class TallyDatabase {
 }
 
 export default TallyDatabase;
-
