@@ -1,6 +1,8 @@
-import { Client, GatewayIntentBits, SlashCommandBuilder, REST, Routes, Interaction } from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
-import { handleAdd, handleRemove, handleScoreboard, handleReset } from './actions';
+import { CommandNames } from './constants';
+import commands from './command-definitions';
+import ActionHandler from './action-handler';
 
 dotenv.config();
 
@@ -24,43 +26,7 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-const commands = [
-    new SlashCommandBuilder()
-        .setName('sick')
-        .setDescription('Manage sickness tallies')
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('add')
-                .setDescription('Add a sickness tally')
-                .addUserOption(option =>
-                    option
-                        .setName('user')
-                        .setDescription(
-                            'User to add sickness tally for (defaults to yourself if not specified)'
-                        )
-                        .setRequired(false)
-                )
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('remove')
-                .setDescription('Remove a sickness tally')
-                .addUserOption(option =>
-                    option
-                        .setName('user')
-                        .setDescription(
-                            'User to remove a sickness tally for (defaults to yourself if not specified)'
-                        )
-                        .setRequired(false)
-                )
-        )
-        .addSubcommand(subcommand =>
-            subcommand.setName('scoreboard').setDescription('Show current scoreboard')
-        )
-        .addSubcommand(subcommand =>
-            subcommand.setName('reset').setDescription('Reset all sickness tallies (Admin only)')
-        )
-];
+
 
 const env = getEnv();
 const rest = new REST({ version: '10' }).setToken(env.DISCORD_TOKEN);
@@ -68,7 +34,7 @@ const rest = new REST({ version: '10' }).setToken(env.DISCORD_TOKEN);
 client.on('interactionCreate', async (interaction: Interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
-    if (interaction.commandName !== 'sick') return;
+    if (interaction.commandName !== CommandNames.Sick) return;
 
     const subcommand = interaction.options.getSubcommand();
     const user = interaction.options.getUser('user') || interaction.user;
@@ -78,18 +44,20 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         return;
     }
 
+    const actionHandler = new ActionHandler(interaction);
+
     switch (subcommand) {
-        case 'add':
-            await handleAdd(interaction);
+        case CommandNames.Add:
+            await actionHandler.add();
             break;
-        case 'remove':
-            await handleRemove(interaction);
+        case CommandNames.Remove:
+            await actionHandler.remove();
             break;
-        case 'scoreboard':
-            await handleScoreboard(interaction);
+        case CommandNames.Scoreboard:
+            await actionHandler.scoreboard();
             break;
-        case 'reset':
-            await handleReset(interaction);
+        case CommandNames.Reset:
+            await actionHandler.reset();
             break;
     }
 });
